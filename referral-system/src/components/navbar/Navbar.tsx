@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from "./img/logoApex.png";
+import logo from "./img/apex_logo_white.svg";
 import './navbar.scss';
 import {Link} from "react-router-dom";
 
@@ -53,7 +53,7 @@ const Navbar = () => {
 
     return (
         <AppBar position="static">
-            <Container maxWidth={false}>
+            <Container className="navbar" maxWidth={false}>
                 <Toolbar disableGutters>
                     <Box component="div" sx={{display: {xs: 'none', sm: 'none', md: 'block'}}}>
                         <Link to="/"><img src={logo} className="apex-logo" alt="Apexlogo"/></Link>
@@ -95,6 +95,9 @@ const Navbar = () => {
                                 </MenuItem>
                             ))}
                         </Menu>
+                    </Box>
+                    <Box component="div" sx={{display: {xs: 'block', sm: 'block', md: 'none'}}}>
+                        <Link to="/"><img src={logo} className="apex-logo-mobile" alt="Apexlogo"/></Link>
                     </Box>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {views.map((view) => (
