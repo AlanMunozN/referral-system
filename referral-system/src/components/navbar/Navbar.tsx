@@ -55,7 +55,7 @@ const Navbar = () => {
         <AppBar position="static">
             <Container className="navbar" maxWidth={false}>
                 <Toolbar disableGutters>
-                    <Box component="div" sx={{display: {xs: 'none', sm: 'none', md: 'block'}}}>
+                    <Box component="div" sx={{display: {xs: 'none', sm: 'none', md: 'flex'}}}>
                         <Link to="/"><img src={logo} className="apex-logo" alt="Apexlogo"/></Link>
                     </Box>
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
