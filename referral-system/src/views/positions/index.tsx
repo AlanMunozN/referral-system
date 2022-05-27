@@ -1,11 +1,11 @@
 //Dependencies
 import React from "react";
-import StickyHeadTable from "../../components/table/table";
+import TablePositions from "../../components/table/TablePositions";
 
 const OpenPosition = () => {
     return (<>
             <h2>Open Position</h2>
-            <StickyHeadTable/>
+            <TablePositions/>
         </>
     );
 }
