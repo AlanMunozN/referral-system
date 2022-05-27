@@ -1,6 +1,7 @@
 import axios from "axios"
+import {log} from "util";
 
-export class PositionsService {
+export default class PositionsService {
   url: string;
 
   constructor(){
@@ -8,18 +9,22 @@ export class PositionsService {
   }
 
   getPositions(){
-
+    Promise.all([
+      axios.get(this.url)
+    ])
+      .then(response => {
+        return  response[0]
+      })
+      .catch( error => {
+        console.log(error);
+      });
   }
 
-  deletePostion(){
-
+  deletePosition(){
+    return ''
   }
 
-  updatePostion(){
-
-  }
-
-  get positions(){
-    return this.getPositions();
+  updatePosition(){
+    return ''
   }
 }
