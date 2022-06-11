@@ -7,9 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import CrudButton from '../crudbuttons/crudbutton';
 
 interface Column {
-    id: 'name' | 'code' | 'population' | 'size' | 'density';
+    id: 'userId' | 'firstName' | 'givenName' | 'lastName' | 'phoneNumber' | 'Email' | 'Linkedin' | 'CV' | 'Actions';
     label: string;
     minWidth?: number;
     align?: 'right';
@@ -17,95 +18,51 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-    {
-        id: 'population',
-        label: 'Population',
-        minWidth: 170,
-        align: 'right',
-        format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 170,
-        align: 'right',
-        format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'density',
-        label: 'Density',
-        minWidth: 170,
-        align: 'right',
-        format: (value: number) => value.toFixed(2),
-    },
+    { id: 'userId', label: 'ID', minWidth: 2 },
+    { id: 'firstName', label: 'Name', minWidth: 100 },
+    { id: 'givenName', label: 'Given Name', minWidth: 100 },
+    { id: 'lastName', label: 'Last Name', minWidth: 100 },
+    { id: 'phoneNumber', label: 'Phone', minWidth: 80 },
+    { id: 'Email', label: 'Email', minWidth: 190 },
+    { id: 'Linkedin', label: 'Linkedin', minWidth: 190 },
+    { id: 'CV', label: 'CV', minWidth: 190 },
+    { id: 'Actions', label: 'Actions', minWidth: 30 },
 ];
 
 interface Data {
-    name: string;
-    code: string;
-    population: number;
-    size: number;
-    density: number;
+    userId: number;
+    firstName: string;
+    givenName: string;
+    lastName: string;
+    phoneNumber: string;
+    Email: string;
+    Linkedin: string;
+    CV: string;
+    Actions: object;
 }
 
 function createData(
-    name: string,
-    code: string,
-    population: number,
-    size: number,
+    userId: number,
+    firstName: string,
+    givenName: string,
+    lastName: string,
+    phoneNumber: string,
+    Email: string,
+    Linkedin: string,
+    CV: string
 ): Data {
-    const density = population / size;
-    return { name, code, population, size, density };
+    const Actions = ( <CrudButton/> );
+    return { userId, firstName, givenName, lastName, phoneNumber, Email, Linkedin, CV, Actions };
 }
 
 const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
+    createData(1, 'Jose', 'Diaz', 'Gonzales', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv.pdf'),
+    createData(2, 'Alejandro', 'Marti', 'Escalante', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv2.pdf'),
+    createData(3, 'Mario', 'Marin', 'Pochat', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+    createData(4, 'Eduardo', 'Telles', 'Lopez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+    createData(5, 'Ricardo', 'Montalban', 'Gutierrez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+    createData(5, 'Gustavo', 'Garcia', 'Marquez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+    createData(6, 'Alberto', 'Suarez', 'Mojarres', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf')
 ];
 
 export default function StickyHeadTable() {
@@ -143,7 +100,7 @@ export default function StickyHeadTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.userId}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (
@@ -161,7 +118,7 @@ export default function StickyHeadTable() {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[7, 13, 50, 100]}
+                rowsPerPageOptions={[5, 10, 20, 50, 100]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
