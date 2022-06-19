@@ -51,12 +51,26 @@ const ApexSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function RefferralForm() {
-    const [firstName, setFirstName] = useState("");
-    const [givenName, setGivenName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState();
-    const [email, setEmail] = useState("");
-    const [linkedin, setLinkedin] = useState("");
+
+    const initialState = {
+        firstName: "",
+        givenName: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        linkedin: "",
+        cv: ""
+    };
+
+    const [
+        { firstName, givenName, lastName, phone, email, linkedin, cv },
+        setState
+    ] = useState(initialState);
+
+    const clearState = () => {
+        setState({ ...initialState });
+        setState(prevState => ({ ...prevState, ['phone']: '52' }));
+    };
 
     const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
         function TextMaskCustom(props, ref: any) {
@@ -75,51 +89,44 @@ export default function RefferralForm() {
     );
 
     const handleInputValidations = (event: any) => {
-        console.log(event);
-        console.log(event.target.id);
+        let { id, value } = event.target;
 
-        switch (event.target.id) {
-            case 'name':
-                event.target.value = event.target.value.replace(/[^a-zA-Z\s]/gi, "");
-                setFirstName(event.target.value);
+        switch (id) {
+            case 'firstName':
+                value = value.replace(/[^a-zA-Z\s]/gi, "");
                 break;
             case 'given':
-                event.target.value = event.target.value.replace(/[^a-zA-Z]/gi, "");
-                setGivenName(event.target.value);
+                value = value.replace(/[^a-zA-Z]/gi, "");
                 break;
             case 'last':
-                event.target.value = event.target.value.replace(/[^a-zA-Z]/gi, "");
-                setLastName(event.target.value);
+                value = value.replace(/[^a-zA-Z]/gi, "");
                 break;
-            case 'phone':
-                setPhone(event.target.value);
-                break;
-            case 'linkedin':
-                setLinkedin(event.target.value);
-                break;
-            case 'email':
-                event.target.value = event.target.value.replace(/\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/, "");
-                setEmail(event.target.value);
-                break;
-            default:
-                console.log('this case is not defined in this form');
+/*            case 'email':
+                event = event.replace(/\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/, "");
+                break;*/
         }
+        setState(prevState => ({ ...prevState, [id]: value }));
     }
 
     function handleNumber(event: any) {
-        setPhone(event.value);
+        const { value, id } = event;
+
+        setState(prevState => ({ ...prevState, [id]: value }));
     }
 
-    const handleLinkedinOnFocus = () => {
-        setLinkedin(linkedin.slice(28,-1));
+    const handleLinkedinOnFocus = (event: any) => {
+        const { id, value } = event.target;
+        setState(prevState => ({ ...prevState, [id]: value.slice(28,-1) }));
     }
 
-    const handleLinkedinOnBlur = () => {
-        if(linkedin.length<1){
-            setLinkedin('');
+    const handleLinkedinOnBlur = (event: any) => {
+        const { id, value } = event.target;
+
+        if(value.length<1){
+            setState(prevState => ({ ...prevState, [id]: '' }));
         }
         else {
-            setLinkedin(`https://www.linkedin.com/in/${linkedin}/`);
+            setState(prevState => ({ ...prevState, [id]: `https://www.linkedin.com/in/${value}/` }));
         }
     }
 
@@ -130,9 +137,9 @@ export default function RefferralForm() {
             <form className='refferal-form'>
                 <FormGroup>
                     <Stack spacing={4} direction="row">
-                        <TextField id="name" type="text" label="First Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ firstName }/>
-                        <TextField id="given" type="text" label="Given Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ givenName }/>
-                        <TextField id="last" type="text" label="Last Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ lastName }/>
+                        <TextField id="firstName" type="text" label="First Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ firstName }/>
+                        <TextField id="givenName" type="text" label="Given Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ givenName }/>
+                        <TextField id="lastName" type="text" label="Last Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ lastName }/>
                     </Stack>
                     <br/>
 {/*                    <Stack spacing={4} direction="row">
@@ -151,21 +158,22 @@ export default function RefferralForm() {
                     </Stack>
                     <br/>*/}
                     <Stack spacing={4} direction="row">
-                        <MuiPhoneNumber defaultCountry={'mx'} value={phone} onChange={ handleNumber }/>
+                        <MuiPhoneNumber id="phone" defaultCountry={'mx'} value={ phone } onChange={ handleNumber }/>
 
                         <TextField id="email" type="email" label="Email" variant="outlined" fullWidth onChange={ handleInputValidations } value={ email }/>
                     </Stack>
                     <br/>
                     <Stack spacing={4} direction="row">
                         <TextField id="linkedin" type="text" label="Linkedin UserName" variant="outlined" fullWidth onChange={ handleInputValidations } onFocus={ handleLinkedinOnFocus } onBlur={ handleLinkedinOnBlur } value={ linkedin }/>
-                        <TextField id="cv" type="text" label="CV URL" variant="outlined" fullWidth />
+                        <TextField id="cv" type="text" label="CV URL" variant="outlined" fullWidth onChange={ handleInputValidations } value={ cv } />
                     </Stack>
                     <br/>
                     <div className='refferal-center'>
                         <Stack spacing={2} direction="row">
-                            <Button type='reset' variant="contained" endIcon={<Restore />}>
+                            <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
                                 Clear
                             </Button>
+
                             <Button type='submit' variant="contained" endIcon={<Add />}>
                                 Save
                             </Button>
