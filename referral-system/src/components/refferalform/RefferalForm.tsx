@@ -6,6 +6,7 @@ import {Restore} from '@mui/icons-material';
 import Add from '@mui/icons-material/Add';
 import MuiPhoneNumber from "material-ui-phone-number";
 import {IMaskInput} from 'react-imask';
+import {useParams} from "react-router-dom";
 
 interface CustomProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
@@ -52,15 +53,7 @@ const ApexSwitch = styled(Switch)(({ theme }) => ({
 
 export default function RefferralForm(props: any) {
 
-    const initialState = props? {
-        firstName: props.firstName || "",
-        givenName: props.givenName ||"",
-        lastName: props.lastName || "",
-        phone: props.phone || "",
-        email: props.email || "",
-        linkedin: props.linkedin || "",
-        cv: props.cv || ""
-    } : {
+    const initialState = {
         firstName: "",
         givenName: "",
         lastName: "",
@@ -68,6 +61,24 @@ export default function RefferralForm(props: any) {
         email: "",
         linkedin: "",
         cv: ""
+    };
+
+    React.useEffect(() => {
+        handleProps()
+    }, [])
+
+    const handleProps = () => {
+        if (props) {
+            setState({
+                firstName: props.firstName,
+                givenName: props.givenName,
+                lastName: props.lastName,
+                phone: props.phone,
+                email: props.email,
+                linkedin: props.linkedin? `https://www.linkedin.com/in/${props.linkedin}/` : '',
+                cv: props.cv
+            });
+        }
     };
 
     const [
@@ -79,6 +90,8 @@ export default function RefferralForm(props: any) {
         setState({ ...initialState });
         setState(prevState => ({ ...prevState, ['phone']: '52' }));
     };
+
+    const {id}: any = useParams();
 
     const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
         function TextMaskCustom(props, ref: any) {
@@ -181,6 +194,10 @@ export default function RefferralForm(props: any) {
                             <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
                                 Clear
                             </Button>
+
+                            { id && <Button type='reset' variant="contained" endIcon={<Restore />} onClick={handleProps}>
+                                Reset Values
+                            </Button> }
 
                             <Button type='submit' variant="contained" endIcon={<Add />}>
                                 Save
