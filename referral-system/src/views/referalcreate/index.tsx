@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import RefferralForm from "../../components/refferalform/RefferalForm";
 import './index.scss'
 import {useParams} from "react-router-dom";
-import {CircularProgress, Stack} from "@mui/material";
+import {Chip, CircularProgress, Divider, Stack} from "@mui/material";
 
 const ReferralCreate = () => {
     const {id}: any = useParams();
@@ -28,7 +28,9 @@ const ReferralCreate = () => {
     return (
         <>
         <div className="main">
-            <h2>My Referral</h2>
+            <Divider>
+                <Chip label="MY REFERRAL"></Chip>
+            </Divider>
             {
                 !isLoaded? <Stack sx={{ color: 'grey.500' }} spacing={10} direction="row">
                 <CircularProgress color="secondary" />
