@@ -8,6 +8,12 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import CrudButton from '../crudbuttons/crudbutton';
+import {useState} from "react";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import EditOutlinedIcon from "@mui/icons-material/Edit";
+import DeleteOutlinedIcon from "@mui/icons-material/Delete";
+import {Link} from "react-router-dom";
 
 interface Column {
     id: 'userId' | 'firstName' | 'givenName' | 'lastName' | 'phoneNumber' | 'Email' | 'Linkedin' | 'CV' | 'Actions';
@@ -69,6 +75,19 @@ export default function StickyHeadTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(13);
 
+    const [myData, setMyData] = useState<any[]>([]);
+
+    React.useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = async () => {
+        const data = await fetch('https://jsonplaceholder.typicode.com/users')
+        const referral = await data.json();
+        console.log(referral);
+        setMyData(referral);
+    }
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -87,7 +106,7 @@ export default function StickyHeadTable() {
                             {columns.map((column) => (
                                 <TableCell
                                     key={column.id}
-                                    align={column.align}
+                                    align={'left'}
                                     style={{ minWidth: column.minWidth }}
                                 >
                                     {column.label}
@@ -96,21 +115,49 @@ export default function StickyHeadTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {myData
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((data) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.userId}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number'
-                                                        ? column.format(value)
-                                                        : value}
-                                                </TableCell>
-                                            );
-                                        })}
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={data.id}>
+                                        <TableCell key={data.id} align={'left'}>
+                                            {data.id}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A1'} align={'left'}>
+                                            {data.name}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A2'} align={'left'}>
+                                            {data.username}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A3'} align={'left'}>
+                                            {data.address.city}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A4'} align={'left'}>
+                                            5555555555
+                                        </TableCell>
+                                        <TableCell key={data.id+'A5'} align={'left'}>
+                                            {data.email}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A6'} align={'left'}>
+                                            {data.website}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A7'} align={'left'}>
+                                            {data.website}
+                                        </TableCell>
+                                        <TableCell key={data.id+'A8'} align={'left'}>
+                                            <Box sx={{ '& button': { m: 1 } }}>
+                                                <div>
+                                                    <IconButton color="primary" component="span">
+                                                        <Link to={`/referrals/edit/${data.id}`}>
+                                                            <EditOutlinedIcon />
+                                                        </Link>
+                                                    </IconButton>
+                                                    <IconButton color="primary" component="span">
+                                                        <DeleteOutlinedIcon />
+                                                    </IconButton>
+                                                </div>
+                                            </Box>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
@@ -120,7 +167,7 @@ export default function StickyHeadTable() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 20, 50, 100]}
                 component="div"
-                count={rows.length}
+                count={myData.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

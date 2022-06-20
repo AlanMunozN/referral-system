@@ -90,7 +90,7 @@ const Navbar = () => {
                             {views.map((view) => (
                                 <MenuItem key={view.url} onClick={handleCloseNavMenu}>
                                     <Typography textAlign="center">
-                                        <Link style={{textDecoration: "none", color: "black"}} to={view.url}>{view.title}</Link>
+                                        <Link style={{textDecoration: "none", color: "black"}} to={`/${view.url}`}>{view.title}</Link>
                                     </Typography>
                                 </MenuItem>
                             ))}
@@ -106,7 +106,7 @@ const Navbar = () => {
                                 onClick={handleCloseNavMenu}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
-                                <Link style={{textDecoration: "none", color: "white"}} to={view.url}>{view.title}</Link>
+                                <Link style={{textDecoration: "none", color: "white"}} to={`/${view.url}`}>{view.title}</Link>
                             </Button>
                         ))}
                     </Box>

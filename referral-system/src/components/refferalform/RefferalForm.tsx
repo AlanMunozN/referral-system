@@ -50,9 +50,17 @@ const ApexSwitch = styled(Switch)(({ theme }) => ({
       },
 }));
 
-export default function RefferralForm() {
+export default function RefferralForm(props: any) {
 
-    const initialState = {
+    const initialState = props? {
+        firstName: props.firstName || "",
+        givenName: props.givenName ||"",
+        lastName: props.lastName || "",
+        phone: props.phone || "",
+        email: props.email || "",
+        linkedin: props.linkedin || "",
+        cv: props.cv || ""
+    } : {
         firstName: "",
         givenName: "",
         lastName: "",
