@@ -5,7 +5,7 @@ import './index.scss'
 import {useParams} from "react-router-dom";
 import {Chip, CircularProgress, Divider, Stack} from "@mui/material";
 
-const ReferralCreate = () => {
+const ReferralEdit = () => {
     const {id}: any = useParams();
 
     const [referralData, setReferralData] = useState<any>();
@@ -29,7 +29,7 @@ const ReferralCreate = () => {
         <>
         <div className="main">
             <Divider>
-                <Chip label="CREATE A REFERRAL"></Chip>
+                <Chip label="EDIT A REFERRAL"></Chip>
             </Divider>
             {
                 !isLoaded? <Stack sx={{ color: 'grey.500' }} spacing={10} direction="row">
@@ -51,4 +51,4 @@ const ReferralCreate = () => {
         </>
     );
 }
-export default ReferralCreate;
+export default ReferralEdit;

@@ -14,7 +14,7 @@ const MyReferral = () => {
         <>
         <div className="main">
             <Divider>
-                <Chip label="MY REFERRAL"></Chip>
+                <Chip label="MY REFERRALS"></Chip>
             </Divider>
             <br></br>
             <CreateButton/>

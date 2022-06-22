@@ -1,0 +1,11 @@
+.copy-email-icon {
+    margin-left: .4em;
+    position: relative;
+    top: .3em;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.copy-email-icon:hover {
+    opacity: 1;
+}

@@ -11,9 +11,10 @@ import CrudButton from '../crudbuttons/crudbutton';
 import {useState} from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import EditOutlinedIcon from "@mui/icons-material/Edit";
-import DeleteOutlinedIcon from "@mui/icons-material/Delete";
 import {Link} from "react-router-dom";
+import {FileOpen, LinkedIn, CopyAll, Edit, Delete} from '@mui/icons-material/';
+import './table.scss';
+
 
 interface Column {
     id: 'userId' | 'firstName' | 'givenName' | 'lastName' | 'phoneNumber' | 'Email' | 'Linkedin' | 'CV' | 'Actions';
@@ -24,15 +25,14 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'userId', label: 'ID', minWidth: 2 },
-    { id: 'firstName', label: 'Name', minWidth: 100 },
-    { id: 'givenName', label: 'Given Name', minWidth: 100 },
-    { id: 'lastName', label: 'Last Name', minWidth: 100 },
-    { id: 'phoneNumber', label: 'Phone', minWidth: 80 },
-    { id: 'Email', label: 'Email', minWidth: 190 },
-    { id: 'Linkedin', label: 'Linkedin', minWidth: 190 },
-    { id: 'CV', label: 'CV', minWidth: 190 },
-    { id: 'Actions', label: 'Actions', minWidth: 30 },
+    { id: 'firstName', label: 'Name', minWidth: 160 },
+    { id: 'givenName', label: 'Given Name', minWidth: 160 },
+    { id: 'lastName', label: 'Last Name', minWidth: 160 },
+    { id: 'phoneNumber', label: 'Phone', minWidth: 100 },
+    { id: 'Email', label: 'Email', minWidth: 260 },
+    { id: 'Linkedin', label: 'Linkedin', minWidth: 60 },
+    { id: 'CV', label: 'CV', minWidth: 60 },
+    { id: 'Actions', label: 'Actions', minWidth: 30},
 ];
 
 interface Data {
@@ -61,15 +61,16 @@ function createData(
     return { userId, firstName, givenName, lastName, phoneNumber, Email, Linkedin, CV, Actions };
 }
 
-const rows = [
-    createData(1, 'Jose', 'Diaz', 'Gonzales', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv.pdf'),
-    createData(2, 'Alejandro', 'Marti', 'Escalante', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv2.pdf'),
-    createData(3, 'Mario', 'Marin', 'Pochat', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
-    createData(4, 'Eduardo', 'Telles', 'Lopez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
-    createData(5, 'Ricardo', 'Montalban', 'Gutierrez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
-    createData(5, 'Gustavo', 'Garcia', 'Marquez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
-    createData(6, 'Alberto', 'Suarez', 'Mojarres', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf')
-];
+// TODO delete this commented code
+// const rows = [
+//     createData(1, 'Jose', 'Diaz', 'Gonzales', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv.pdf'),
+//     createData(2, 'Alejandro', 'Marti', 'Escalante', '5555555555', 'test@test.com', 'linkedin@josedg', 'www.test.com/cv2.pdf'),
+//     createData(3, 'Mario', 'Marin', 'Pochat', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+//     createData(4, 'Eduardo', 'Telles', 'Lopez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+//     createData(5, 'Ricardo', 'Montalban', 'Gutierrez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+//     createData(5, 'Gustavo', 'Garcia', 'Marquez', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf'),
+//     createData(6, 'Alberto', 'Suarez', 'Mojarres', '5555555555', 'test1@test.com', 'linkedin@asuarez', 'www.test.com/cv3.pdf')
+// ];
 
 export default function StickyHeadTable() {
     const [page, setPage] = React.useState(0);
@@ -120,9 +121,6 @@ export default function StickyHeadTable() {
                             .map((data) => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={data.id}>
-                                        <TableCell key={data.id} align={'left'}>
-                                            {data.id}
-                                        </TableCell>
                                         <TableCell key={data.id+'A1'} align={'left'}>
                                             {data.name}
                                         </TableCell>
@@ -137,23 +135,31 @@ export default function StickyHeadTable() {
                                         </TableCell>
                                         <TableCell key={data.id+'A5'} align={'left'}>
                                             {data.email}
+                                            <Link to={'#'} onClick={() => {navigator.clipboard.writeText(data.email)}}>
+                                                <CopyAll className='copy-email-icon'></CopyAll>
+                                            </Link>
                                         </TableCell>
                                         <TableCell key={data.id+'A6'} align={'left'}>
-                                            {data.website}
+                                            <Link to={'#'}>
+                                                {/* {data.website} */}
+                                                <LinkedIn></LinkedIn>
+                                            </Link>
                                         </TableCell>
                                         <TableCell key={data.id+'A7'} align={'left'}>
-                                            {data.website}
+                                            <Link to={'#'}>
+                                                <FileOpen></FileOpen>
+                                            </Link>
                                         </TableCell>
                                         <TableCell key={data.id+'A8'} align={'left'}>
                                             <Box sx={{ '& button': { m: 1 } }}>
                                                 <div>
                                                     <IconButton color="primary" component="span">
                                                         <Link to={`/referrals/edit/${data.id}`}>
-                                                            <EditOutlinedIcon />
+                                                            <Edit/>
                                                         </Link>
                                                     </IconButton>
                                                     <IconButton color="primary" component="span">
-                                                        <DeleteOutlinedIcon />
+                                                        <Delete/>
                                                     </IconButton>
                                                 </div>
                                             </Box>

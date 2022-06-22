@@ -1,55 +1,17 @@
+import './refferal.scss'
 import * as React from 'react';
 import {useState} from 'react';
-import {Button, FormGroup, Stack, styled, Switch, TextField} from '@mui/material';
-import './refferal.scss'
-import {Restore} from '@mui/icons-material';
-import Add from '@mui/icons-material/Add';
-import MuiPhoneNumber from "material-ui-phone-number";
 import {IMaskInput} from 'react-imask';
+import Add from '@mui/icons-material/Add';
 import {useParams} from "react-router-dom";
+import PhoneInput from 'react-phone-input-2'
+import {Restore, UndoOutlined} from '@mui/icons-material';
+import {Button, FormGroup, Stack, TextField} from '@mui/material';
 
 interface CustomProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
     name: string;
 }
-
-const ApexSwitch = styled(Switch)(({ theme }) => ({
-    padding: 8,
-    '& .MuiSwitch-track': {
-        borderRadius: 22 / 2,
-        '&:before, &:after': {
-          content: '""',
-          position: 'absolute',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: 16,
-          height: 16,
-        },
-        '&:before': {
-          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-            theme.palette.getContrastText(theme.palette.primary.main),
-          )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
-          left: 12,
-        },
-        '&:after': {
-          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-            theme.palette.getContrastText(theme.palette.primary.main),
-          )}" d="M19,13H5V11H19V13Z" /></svg>')`,
-          right: 12,
-        },
-      },
-      '& .MuiSwitch-thumb': {
-        boxShadow: 'none',
-        width: 16,
-        height: 16,
-        margin: 2,
-      },
-    '& .MuiSwitch-switchBase': {
-        '&.Mui-checked': {
-          color: '#44546A',
-        },
-      },
-}));
 
 export default function RefferralForm(props: any) {
 
@@ -97,7 +59,6 @@ export default function RefferralForm(props: any) {
         function TextMaskCustom(props, ref: any) {
             const { onChange } = props;
             return (
-
                 <IMaskInput
                     mask="(#0) 000-000-0000"
                     definitions={{
@@ -122,9 +83,12 @@ export default function RefferralForm(props: any) {
             case 'last':
                 value = value.replace(/[^a-zA-Z]/gi, "");
                 break;
-/*            case 'email':
-                event = event.replace(/\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/, "");
-                break;*/
+            // case 'linkedin':
+            //     value = value.replace(/[^a-zA-Z]/gi, "");
+            //     break;
+            case 'email':
+                // event = event.replace(/\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/, "");
+                break;
         }
         setState(prevState => ({ ...prevState, [id]: value }));
     }
@@ -163,30 +127,46 @@ export default function RefferralForm(props: any) {
                         <TextField id="lastName" type="text" label="Last Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ lastName }/>
                     </Stack>
                     <br/>
-{/*                    <Stack spacing={4} direction="row">
-                        <MuiPhoneNumber defaultCountry={'mx'} value={phone} onChange={ handleNumber }/>
-
-                        <TextField id="phone" type="text" label="Phone Number" variant="outlined"
-                                   value={phone}
-                                   onChange={handleInputValidations}
-                                   InputProps={{
-                                       inputComponent: TextMaskCustom as any,
-                                   }}
-                        />
-
-                        <TextField id="phone" type="text" label="Phone Number" variant="outlined" fullWidth onChange={ handleInputValidations } value={ phone }/>
-
-                    </Stack>
-                    <br/>*/}
                     <Stack spacing={4} direction="row">
-                        <MuiPhoneNumber id="phone" defaultCountry={'mx'} value={ phone } onChange={ handleNumber }/>
-
-                        <TextField id="email" type="email" label="Email" variant="outlined" fullWidth onChange={ handleInputValidations } value={ email }/>
+                        <PhoneInput
+                            country={ 'mx' }
+                            value={ phone }
+                            onChange={ handleNumber }
+                        />
+                        <TextField
+                            // error
+                            fullWidth
+                            id="email"
+                            type="email"
+                            label="Email"
+                            variant="outlined"
+                            defaultValue="Email"
+                            helperText="Incorrect entry."
+                            value={ email }
+                            onChange={ handleInputValidations }
+                        />
                     </Stack>
                     <br/>
                     <Stack spacing={4} direction="row">
-                        <TextField id="linkedin" type="text" label="Linkedin UserName" variant="outlined" fullWidth onChange={ handleInputValidations } onFocus={ handleLinkedinOnFocus } onBlur={ handleLinkedinOnBlur } value={ linkedin }/>
-                        <TextField id="cv" type="text" label="CV URL" variant="outlined" fullWidth onChange={ handleInputValidations } value={ cv } />
+                        <TextField
+                            fullWidth
+                            id="linkedin"
+                            type="text"
+                            label="Linkedin UserName"
+                            variant="outlined"
+                            onChange={ handleInputValidations }
+                            onFocus={ handleLinkedinOnFocus }
+                            onBlur={ handleLinkedinOnBlur }
+                            value={ linkedin }
+                        />
+                        <TextField
+                            fullWidth
+                            id="cv"
+                            type="text"
+                            label="CV URL"
+                            variant="outlined"
+                            onChange={ handleInputValidations } value={ cv }
+                        />
                     </Stack>
                     <br/>
                     <div className='refferal-center'>
@@ -194,11 +174,9 @@ export default function RefferralForm(props: any) {
                             <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
                                 Clear
                             </Button>
-
-                            { id && <Button type='reset' variant="contained" endIcon={<Restore />} onClick={handleProps}>
-                                Reset Values
+                            { id && <Button type='reset' variant="contained" endIcon={<UndoOutlined />} onClick={handleProps}>
+                                Undo
                             </Button> }
-
                             <Button type='submit' variant="contained" endIcon={<Add />}>
                                 Save
                             </Button>

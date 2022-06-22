@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fab, FormControlLabel, Stack, styled, Switch } from '@mui/material';
+import { Fab, Stack, styled } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './button.scss';
 
@@ -12,11 +12,15 @@ const ApexButton = styled(Fab)(({ theme }) => ({
 export default function CreateButton() {
   return (
     <Stack spacing={2} direction="row">
-      <a className='apex-button' href="/create" >
+      <div className='apex-button'>
+      <a href="/create" >
       <Fab color="primary" aria-label="add" >
         <AddIcon />
       </Fab>
       </a>
+      <br></br>
+      <small className='sub-text'>Create Referral</small>
+      </div>
     </Stack>
   );
 }
