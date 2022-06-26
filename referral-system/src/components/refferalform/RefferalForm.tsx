@@ -1,25 +1,20 @@
 import './refferal.scss'
 import * as React from 'react';
 import {useState} from 'react';
-import {IMaskInput} from 'react-imask';
 import Add from '@mui/icons-material/Add';
 import {useParams} from "react-router-dom";
 import PhoneInput from 'react-phone-input-2'
+import * as EmailValidator from 'email-validator';
 import {Restore, UndoOutlined} from '@mui/icons-material';
 import {Button, FormGroup, Stack, TextField} from '@mui/material';
 
-interface CustomProps {
-    onChange: (event: { target: { name: string; value: string } }) => void;
-    name: string;
-}
-
-export default function RefferralForm(props: any) {
+export default function RefferralForm(this: any, props: any) {
 
     const initialState = {
         firstName: "",
         givenName: "",
         lastName: "",
-        phone: "",
+        phone: "+52",
         email: "",
         linkedin: "",
         cv: ""
@@ -50,25 +45,10 @@ export default function RefferralForm(props: any) {
 
     const clearState = () => {
         setState({ ...initialState });
-        setState(prevState => ({ ...prevState, ['phone']: '52' }));
+        setState(prevState => ({ ...prevState }));
     };
 
     const {id}: any = useParams();
-
-    const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
-        function TextMaskCustom(props, ref: any) {
-            const { onChange } = props;
-            return (
-                <IMaskInput
-                    mask="(#0) 000-000-0000"
-                    definitions={{
-                        '#': /[1-9]/,
-                    }}
-                    onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-                />
-            );
-        },
-    );
 
     const handleInputValidations = (event: any) => {
         let { id, value } = event.target;
@@ -82,12 +62,6 @@ export default function RefferralForm(props: any) {
                 break;
             case 'last':
                 value = value.replace(/[^a-zA-Z]/gi, "");
-                break;
-            // case 'linkedin':
-            //     value = value.replace(/[^a-zA-Z]/gi, "");
-            //     break;
-            case 'email':
-                // event = event.replace(/\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/, "");
                 break;
         }
         setState(prevState => ({ ...prevState, [id]: value }));
@@ -115,6 +89,15 @@ export default function RefferralForm(props: any) {
         }
     }
 
+    const isValidURL = (string: string) => {
+        var res = string.match(/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig);
+        return (res !== null)
+    };
+
+    const isEmptyString = (str: string) => {
+        return (typeof str === 'string' && str.trim().length === 0);
+    };
+
     return (
       <Stack spacing={2} direction="column">
         <hr></hr>
@@ -122,28 +105,59 @@ export default function RefferralForm(props: any) {
             <form className='refferal-form'>
                 <FormGroup>
                     <Stack spacing={4} direction="row">
-                        <TextField id="firstName" type="text" label="First Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ firstName }/>
-                        <TextField id="givenName" type="text" label="Given Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ givenName }/>
-                        <TextField id="lastName" type="text" label="Last Name" variant="outlined" fullWidth onChange={ handleInputValidations } value={ lastName }/>
+                        <TextField
+                            required
+                            fullWidth
+                            id="firstName"
+                            type="text"
+                            label="First Name"
+                            variant="outlined"
+                            onChange={ handleInputValidations }
+                            value={ firstName }
+                        />
+                        <TextField 
+                            fullWidth
+                            id="givenName"
+                            type="text"
+                            label="Given Name"
+                            variant="outlined"
+                            onChange={ handleInputValidations }
+                            value={ givenName }
+                        />
+                        <TextField
+                            required
+                            fullWidth
+                            id="lastName"
+                            type="text"
+                            label="Last Name"
+                            variant="outlined"
+                            onChange={ handleInputValidations }
+                            value={ lastName }
+                        />
                     </Stack>
                     <br/>
                     <Stack spacing={4} direction="row">
                         <PhoneInput
+                            inputProps={{
+                                name: 'phone',
+                                required: true,
+                                autoFocus: true
+                                }}
                             country={ 'mx' }
                             value={ phone }
                             onChange={ handleNumber }
                         />
                         <TextField
-                            // error
+                            required
                             fullWidth
                             id="email"
                             type="email"
                             label="Email"
                             variant="outlined"
                             defaultValue="Email"
-                            helperText="Incorrect entry."
                             value={ email }
                             onChange={ handleInputValidations }
+                            error={ (isEmptyString(email) ? false : !EmailValidator.validate(email)) }
                         />
                     </Stack>
                     <br/>
@@ -160,12 +174,15 @@ export default function RefferralForm(props: any) {
                             value={ linkedin }
                         />
                         <TextField
+                            required
                             fullWidth
                             id="cv"
                             type="text"
                             label="CV URL"
                             variant="outlined"
-                            onChange={ handleInputValidations } value={ cv }
+                            onChange={ handleInputValidations }
+                            value={ cv }
+                            error={ (isEmptyString(cv) ? false : !isValidURL(cv)) }
                         />
                     </Stack>
                     <br/>
