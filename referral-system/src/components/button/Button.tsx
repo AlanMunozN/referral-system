@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fab, Stack, styled } from '@mui/material';
+import { Button, Fab, Stack, styled } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './button.scss';
 
@@ -13,13 +13,11 @@ export default function CreateButton() {
   return (
     <Stack spacing={2} direction="row">
       <div className='apex-button'>
-      <a href="/create" >
-      <Fab color="primary" aria-label="add" >
-        <AddIcon />
-      </Fab>
-      </a>
-      <br></br>
-      <small className='sub-text'>Create Referral</small>
+        <a href="/create">
+          <Button type='submit' variant="contained" endIcon={<AddIcon />}>
+            Create Referral
+          </Button>
+        </a>
       </div>
     </Stack>
   );

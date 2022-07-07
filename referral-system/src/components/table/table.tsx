@@ -17,7 +17,7 @@ import './table.scss';
 
 
 interface Column {
-    id: 'userId' | 'firstName' | 'givenName' | 'lastName' | 'phoneNumber' | 'Email' | 'Linkedin' | 'CV' | 'Actions';
+    id: 'userId' | 'firstName' | 'phoneNumber' | 'Email' | 'Linkedin' | 'CV' | 'Actions';
     label: string;
     minWidth?: number;
     align?: 'right';
@@ -25,9 +25,7 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'firstName', label: 'Name', minWidth: 160 },
-    { id: 'givenName', label: 'Given Name', minWidth: 160 },
-    { id: 'lastName', label: 'Last Name', minWidth: 160 },
+    { id: 'firstName', label: 'Full Name', minWidth: 100 },
     { id: 'phoneNumber', label: 'Phone', minWidth: 100 },
     { id: 'Email', label: 'Email', minWidth: 260 },
     { id: 'Linkedin', label: 'Linkedin', minWidth: 60 },
@@ -38,8 +36,6 @@ const columns: readonly Column[] = [
 interface Data {
     userId: number;
     firstName: string;
-    givenName: string;
-    lastName: string;
     phoneNumber: string;
     Email: string;
     Linkedin: string;
@@ -50,15 +46,13 @@ interface Data {
 function createData(
     userId: number,
     firstName: string,
-    givenName: string,
-    lastName: string,
     phoneNumber: string,
     Email: string,
     Linkedin: string,
     CV: string
 ): Data {
     const Actions = ( <CrudButton/> );
-    return { userId, firstName, givenName, lastName, phoneNumber, Email, Linkedin, CV, Actions };
+    return { userId, firstName, phoneNumber, Email, Linkedin, CV, Actions };
 }
 
 // TODO delete this commented code
@@ -122,14 +116,14 @@ export default function StickyHeadTable() {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={data.id}>
                                         <TableCell key={data.id+'A1'} align={'left'}>
-                                            {data.name}
+                                            {data.name + ' ' + data.username}
                                         </TableCell>
-                                        <TableCell key={data.id+'A2'} align={'left'}>
+                                        {/* <TableCell key={data.id+'A2'} align={'left'}>
                                             {data.username}
                                         </TableCell>
                                         <TableCell key={data.id+'A3'} align={'left'}>
                                             {data.address.city}
-                                        </TableCell>
+                                        </TableCell> */}
                                         <TableCell key={data.id+'A4'} align={'left'}>
                                             5555555555
                                         </TableCell>

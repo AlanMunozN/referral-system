@@ -3,21 +3,22 @@ import * as React from 'react';
 import {useState} from 'react';
 import Add from '@mui/icons-material/Add';
 import {useParams} from "react-router-dom";
-import PhoneInput from 'react-phone-input-2'
+import PhoneInput from 'react-phone-input-2';
+import { TagsInput } from "react-tag-input-component";
 import * as EmailValidator from 'email-validator';
 import {Restore, UndoOutlined} from '@mui/icons-material';
-import {Button, FormGroup, Stack, TextField} from '@mui/material';
+import {Button, FormGroup, Stack, TextareaAutosize, TextField} from '@mui/material';
 
 export default function RefferralForm(this: any, props: any) {
 
     const initialState = {
-        firstName: "",
-        givenName: "",
-        lastName: "",
+        fullName: "",
         phone: "+52",
         email: "",
         linkedin: "",
-        cv: ""
+        cv: "",
+        tags: [],
+        comments: ""
     };
 
     React.useEffect(() => {
@@ -27,19 +28,19 @@ export default function RefferralForm(this: any, props: any) {
     const handleProps = () => {
         if (props) {
             setState({
-                firstName: props.firstName,
-                givenName: props.givenName,
-                lastName: props.lastName,
+                fullName: props.fullName,
                 phone: props.phone,
                 email: props.email,
                 linkedin: props.linkedin? `https://www.linkedin.com/in/${props.linkedin}/` : '',
-                cv: props.cv
+                cv: props.cv,
+                tags: props.tag,
+                comments: props.comments
             });
         }
     };
 
     const [
-        { firstName, givenName, lastName, phone, email, linkedin, cv },
+        { fullName, phone, email, linkedin, cv, tags, comments },
         setState
     ] = useState(initialState);
 
@@ -54,14 +55,10 @@ export default function RefferralForm(this: any, props: any) {
         let { id, value } = event.target;
 
         switch (id) {
-            case 'firstName':
+            case 'fullName':
                 value = value.replace(/[^a-zA-Z\s]/gi, "");
                 break;
-            case 'given':
-                value = value.replace(/[^a-zA-Z]/gi, "");
-                break;
-            case 'last':
-                value = value.replace(/[^a-zA-Z]/gi, "");
+            default:
                 break;
         }
         setState(prevState => ({ ...prevState, [id]: value }));
@@ -98,41 +95,30 @@ export default function RefferralForm(this: any, props: any) {
         return (typeof str === 'string' && str.trim().length === 0);
     };
 
+    function handleTags(event: any) {
+        const { id, value } = event;
+
+        setState(prevState => ({ ...prevState, [id]: value }));
+    }
+
     return (
       <Stack spacing={2} direction="column">
         <hr></hr>
         <div className="refferal-base">
             <form className='refferal-form'>
                 <FormGroup>
+                    <input id="referred-id" type="text" value={""} hidden>
+                    </input>
                     <Stack spacing={4} direction="row">
                         <TextField
                             required
                             fullWidth
-                            id="firstName"
+                            id="fullName"
                             type="text"
-                            label="First Name"
+                            label="Full Name"
                             variant="outlined"
                             onChange={ handleInputValidations }
-                            value={ firstName }
-                        />
-                        <TextField 
-                            fullWidth
-                            id="givenName"
-                            type="text"
-                            label="Given Name"
-                            variant="outlined"
-                            onChange={ handleInputValidations }
-                            value={ givenName }
-                        />
-                        <TextField
-                            required
-                            fullWidth
-                            id="lastName"
-                            type="text"
-                            label="Last Name"
-                            variant="outlined"
-                            onChange={ handleInputValidations }
-                            value={ lastName }
+                            value={ fullName }
                         />
                     </Stack>
                     <br/>
@@ -183,6 +169,27 @@ export default function RefferralForm(this: any, props: any) {
                             onChange={ handleInputValidations }
                             value={ cv }
                             error={ (isEmptyString(cv) ? false : !isValidURL(cv)) }
+                        />
+                    </Stack>
+                    <br/>
+                    <Stack spacing={4} direction="row">
+                    <TagsInput
+                        value={tags}
+                        onChange={ handleTags }
+                        name="tags"
+                        placeHolder="tech stacks"
+                        onExisting={ handleTags }
+                    />
+                    </Stack>
+                    <br/>
+                    <Stack spacing={4} direction="row">
+                        <TextareaAutosize
+                            id="comment"
+                            maxRows={10}
+                            aria-label="minimum height"
+                            placeholder="Comments"
+                            style={{ width: '100%', height: 180 }}
+                            value={ comments }
                         />
                     </Stack>
                     <br/>
