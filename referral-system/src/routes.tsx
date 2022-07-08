@@ -9,7 +9,7 @@ import ReferralEdit from './views/referaledit';
 
 const switchDashboardRoutes = (
     <Switch>
-        <Route strict exact path="/" render={() => <Redirect to="/positions"/>}/>
+        <Route strict exact path="/" render={() => <Redirect to="/referrals"/>}/>
         <Route strict exact path="/bonus" component={MyBonus} />
         <Route strict exact path="/referrals" component={MyReferral} />
         <Route strict exact path="/create" component={ReferralCreate} />

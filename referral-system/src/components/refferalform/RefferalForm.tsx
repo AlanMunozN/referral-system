@@ -1,58 +1,75 @@
 import './refferal.scss'
 import * as React from 'react';
-import {useState} from 'react';
-import Add from '@mui/icons-material/Add';
+import {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import PhoneInput from 'react-phone-input-2';
 import { TagsInput } from "react-tag-input-component";
 import * as EmailValidator from 'email-validator';
-import {Restore, UndoOutlined} from '@mui/icons-material';
+import {Add, Restore, UndoOutlined} from '@mui/icons-material';
 import {
     Button,
     FormControl,
     FormGroup,
     InputLabel,
     MenuItem,
-    Select, SelectChangeEvent,
+    Select, 
     Stack,
     TextareaAutosize,
-    TextField
+    TextField,
+    Grid
 } from '@mui/material';
 
 export default function RefferralForm(this: any, props: any) {
 
-    const initialState = {
-        fullName: "",
-        phone: "+52",
-        email: "",
-        linkedin: "",
-        cv: "",
-        tags: [],
-        comments: "",
-        ta_recruiter: ""
+    interface initialState {
+        fullName: string;
+        referred_by: string;
+        ta_recruiter: string;
+        phone: string;
+        email: string;
+        linkedin: string;
+        cv: string;
+        tech_stacks: string[];
+        comments: string;
+    }
+
+    const initialState:initialState  = {
+        fullName: '',
+        referred_by: '',
+        ta_recruiter: '',
+        phone: '+52',
+        email: '',
+        linkedin: '',
+        cv: '',
+        tech_stacks: [],
+        comments: ''
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         handleProps()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleProps = () => {
         if (props) {
             setState({
-                fullName: props.fullName,
-                phone: props.phone,
-                email: props.email,
+                fullName: id ? props.fullName : '',
+                referred_by: props.referred_by,
+                ta_recruiter: id ? props.ta_recruiter : '',
+                phone: id ? props.phone : "+52",
+                email: id ? props.email : '',
                 linkedin: props.linkedin? `https://www.linkedin.com/in/${props.linkedin}/` : '',
-                cv: props.cv,
-                tags: props.tag,
-                comments: props.comments,
-                ta_recruiter: props.ta_recruiter
+                cv: id ? props.cv : '',
+                tech_stacks: props.tech_stacks,
+                comments: props.comments
             });
         }
     };
 
+    const recruiters: string[] = ['Ana', 'Jack', 'Mary', 'John', 'Krish', 'Navin'];
+
     const [
-        { fullName, phone, email, linkedin, cv, tags, comments, ta_recruiter },
+        { fullName, referred_by, ta_recruiter, phone, email, linkedin, cv, tech_stacks, comments },
         setState
     ] = useState(initialState);
 
@@ -99,7 +116,7 @@ export default function RefferralForm(this: any, props: any) {
     }
 
     const isValidURL = (string: string) => {
-        var res = string.match(/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig);
+        var res = string.match(/[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/ig);
         return (res !== null)
     };
 
@@ -107,17 +124,12 @@ export default function RefferralForm(this: any, props: any) {
         return (typeof str === 'string' && str.trim().length === 0);
     };
 
-    function handleTags(event: any) {
-        const { id, value } = event;
+    const [tags, setTags] = useState(id ? props.tech_stacks : []);
 
-        setState(prevState => ({ ...prevState, [id]: value }));
-    }
+    const [open, setOpen] = useState(false);
 
-    const [ta, setTa] = React.useState<string | number>('');
-    const [open, setOpen] = React.useState(false);
-
-    const handleChange = (event: SelectChangeEvent<typeof ta>) => {
-        setTa(event.target.value);
+    const handleSelection = (event: any) => {
+        setState(prevState => ({ ...prevState, ta_recruiter: event.target.value }));
     };
 
     const handleClose = () => {
@@ -130,132 +142,161 @@ export default function RefferralForm(this: any, props: any) {
 
     return (
       <Stack spacing={2} direction="column">
-        <hr></hr>
         <div className="refferal-base">
             <form className='refferal-form'>
                 <FormGroup>
-                    <input id="referred-id" type="text" value={""} hidden>
-                    </input>
-                    <Stack spacing={4} direction="row">
-                        <TextField
-                            required
-                            fullWidth
-                            id="fullName"
-                            type="text"
-                            label="Full Name"
-                            variant="outlined"
-                            onChange={ handleInputValidations }
-                            value={ fullName }
-                        />
-                    </Stack>
-                    <br/>
-                    <Stack spacing={4} direction="row">
-                        <PhoneInput
-                            inputProps={{
-                                name: 'phone',
-                                required: true,
-                                autoFocus: true
-                                }}
-                            country={ 'mx' }
-                            value={ phone }
-                            onChange={ handleNumber }
-                        />
-                        <TextField
-                            required
-                            fullWidth
-                            id="email"
-                            type="email"
-                            label="Email"
-                            variant="outlined"
-                            defaultValue="Email"
-                            value={ email }
-                            onChange={ handleInputValidations }
-                            error={ (isEmptyString(email) ? false : !EmailValidator.validate(email)) }
-                        />
-                    </Stack>
-                    <br/>
-                    <Stack spacing={4} direction="row">
-                        <TextField
-                            fullWidth
-                            id="linkedin"
-                            type="text"
-                            label="Linkedin UserName"
-                            variant="outlined"
-                            onChange={ handleInputValidations }
-                            onFocus={ handleLinkedinOnFocus }
-                            onBlur={ handleLinkedinOnBlur }
-                            value={ linkedin }
-                        />
-                        <TextField
-                            required
-                            fullWidth
-                            id="cv"
-                            type="text"
-                            label="CV URL"
-                            variant="outlined"
-                            onChange={ handleInputValidations }
-                            value={ cv }
-                            error={ (isEmptyString(cv) ? false : !isValidURL(cv)) }
-                        />
-                    </Stack>
-                    <br/>
-                    <Stack spacing={4} direction="row">
-                    <TagsInput
-                        value={tags}
-                        onChange={ handleTags }
-                        name="tags"
-                        placeHolder="tech stacks"
-                        onExisting={ handleTags }
-                    />
-                        { id && <div>
-                            <FormControl sx={{ m: 1, minWidth: 220 }}>
-                                <InputLabel id="ta_recruiter">TA recruiter</InputLabel>
-                                <Select
-                                    labelId="demo-controlled-open-select-label"
-                                    id="demo-controlled-open-select"
-                                    open={open}
-                                    onClose={handleClose}
-                                    onOpen={handleOpen}
-                                    value={ta}
-                                    label="Ta"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={'Ana'}>Ana</MenuItem>
-                                    <MenuItem value={'Pedro'}>Pedro</MenuItem>
-                                    <MenuItem value={'Juan'}>Juan</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div> }
-                    </Stack>
-                    <br/>
-                    <Stack spacing={4} direction="row">
-                        <TextareaAutosize
-                            id="comment"
-                            maxRows={10}
-                            aria-label="minimum height"
-                            placeholder="Comments"
-                            style={{ width: '100%', height: 180 }}
-                            value={ comments }
-                            onChange={ handleInputValidations }
-                        />
-                    </Stack>
-                    <br/>
-                    <div className='refferal-center'>
-                        <Stack spacing={2} direction="row">
-                            <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
-                                Clear
-                            </Button>
-                            { id && <Button type='reset' variant="contained" endIcon={<UndoOutlined />} onClick={handleProps}>
-                                Undo
-                            </Button> }
-                            <Button type='submit' variant="contained" endIcon={<Add />}>
-                                Save
-                            </Button>
+                    { id && <input id="id" type="text" value={id} hidden/> }
+                    <Stack spacing={4} direction={'column'}>
+                        <Stack spacing={4} direction="row">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={id ? 6 : 6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="fullName"
+                                        type="text"
+                                        label="Full Name"
+                                        variant="outlined"
+                                        onChange={ handleInputValidations }
+                                        value={ fullName }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={id ? 4 : 6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="referred_by"
+                                        type="text"
+                                        label="Refered by"
+                                        variant="outlined"
+                                        onChange={ handleInputValidations }
+                                        value={referred_by}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    { id && <div>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="ta_recruiter_label">TA Recruiter</InputLabel>
+                                        <Select
+                                            id="ta_recruiter"
+                                            labelId="ta_recruiter_label"
+                                            open={ open }
+                                            onClose={ handleClose }
+                                            onOpen={ handleOpen }
+                                            value={ ta_recruiter }
+                                            label="Ta"
+                                            onChange={ handleSelection }
+                                        >
+                                            <MenuItem value={'None'}><em>None</em></MenuItem>
+                                            {recruiters.map(name => (
+                                                <MenuItem value={ name }>{ name }</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </div> }
+                                </Grid>
+                            </Grid>
                         </Stack>
-                    </div>
+                        <Stack spacing={4} direction="row">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <PhoneInput
+                                        inputProps={{
+                                            name: 'phone',
+                                            required: true,
+                                            autoFocus: true
+                                            }}
+                                        country={ 'mx' }
+                                        value={ phone }
+                                        onChange={ handleNumber }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        type="email"
+                                        label="Email"
+                                        variant="outlined"
+                                        defaultValue="Email"
+                                        value={ email }
+                                        onChange={ handleInputValidations }
+                                        error={ (isEmptyString(email) ? false : !EmailValidator.validate(email)) }
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                        <Stack spacing={4} direction="row">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        id="linkedin"
+                                        type="text"
+                                        label="Linkedin UserName"
+                                        variant="outlined"
+                                        onChange={ handleInputValidations }
+                                        onFocus={ handleLinkedinOnFocus }
+                                        onBlur={ handleLinkedinOnBlur }
+                                        value={ linkedin }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="cv"
+                                        type="text"
+                                        label="CV URL"
+                                        variant="outlined"
+                                        onChange={ handleInputValidations }
+                                        value={ cv }
+                                        error={ (isEmptyString(cv) ? false : !isValidURL(cv)) }
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                        <Stack spacing={4} direction="row">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={12}>
+                                    <TagsInput
+                                        name="tech_stacks"
+                                        placeHolder="Add stack"
+                                        value={ tags }
+                                        onChange={ setTags }
+                                    />
+                                    <span className="rti--instruction">press enter to add new tag</span>
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                        <Stack spacing={4} direction="row">
+                            <TextareaAutosize
+                                id="comment"
+                                maxRows={10}
+                                aria-label="minimum height"
+                                placeholder="Comments"
+                                style={{ width: '100%', height: 180 }}
+                                value={ comments }
+                                onChange={ handleInputValidations }
+                            />
+                        </Stack>
+                        <Stack spacing={4} direction="column">
+                            <div className='refferal-center'>
+                                <Stack spacing={2} direction="row">
+                                    <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
+                                        Clear
+                                    </Button>
+                                    { id && <Button type='reset' variant="contained" endIcon={<UndoOutlined />} onClick={handleProps}>
+                                        Undo
+                                    </Button> }
+                                    <Button type='submit' variant="contained" endIcon={<Add />}>
+                                        Save
+                                    </Button>
+                                </Stack>
+                            </div>
+                        </Stack>
+                    </Stack>
                 </FormGroup>
             </form>
         </div>
