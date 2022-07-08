@@ -7,7 +7,17 @@ import PhoneInput from 'react-phone-input-2';
 import { TagsInput } from "react-tag-input-component";
 import * as EmailValidator from 'email-validator';
 import {Restore, UndoOutlined} from '@mui/icons-material';
-import {Button, FormGroup, Stack, TextareaAutosize, TextField} from '@mui/material';
+import {
+    Button,
+    FormControl,
+    FormGroup,
+    InputLabel,
+    MenuItem,
+    Select, SelectChangeEvent,
+    Stack,
+    TextareaAutosize,
+    TextField
+} from '@mui/material';
 
 export default function RefferralForm(this: any, props: any) {
 
@@ -18,7 +28,8 @@ export default function RefferralForm(this: any, props: any) {
         linkedin: "",
         cv: "",
         tags: [],
-        comments: ""
+        comments: "",
+        ta_recruiter: ""
     };
 
     React.useEffect(() => {
@@ -34,13 +45,14 @@ export default function RefferralForm(this: any, props: any) {
                 linkedin: props.linkedin? `https://www.linkedin.com/in/${props.linkedin}/` : '',
                 cv: props.cv,
                 tags: props.tag,
-                comments: props.comments
+                comments: props.comments,
+                ta_recruiter: props.ta_recruiter
             });
         }
     };
 
     const [
-        { fullName, phone, email, linkedin, cv, tags, comments },
+        { fullName, phone, email, linkedin, cv, tags, comments, ta_recruiter },
         setState
     ] = useState(initialState);
 
@@ -100,6 +112,21 @@ export default function RefferralForm(this: any, props: any) {
 
         setState(prevState => ({ ...prevState, [id]: value }));
     }
+
+    const [ta, setTa] = React.useState<string | number>('');
+    const [open, setOpen] = React.useState(false);
+
+    const handleChange = (event: SelectChangeEvent<typeof ta>) => {
+        setTa(event.target.value);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
 
     return (
       <Stack spacing={2} direction="column">
@@ -180,6 +207,28 @@ export default function RefferralForm(this: any, props: any) {
                         placeHolder="tech stacks"
                         onExisting={ handleTags }
                     />
+                        { id && <div>
+                            <FormControl sx={{ m: 1, minWidth: 220 }}>
+                                <InputLabel id="ta_recruiter">TA recruiter</InputLabel>
+                                <Select
+                                    labelId="demo-controlled-open-select-label"
+                                    id="demo-controlled-open-select"
+                                    open={open}
+                                    onClose={handleClose}
+                                    onOpen={handleOpen}
+                                    value={ta}
+                                    label="Ta"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={'Ana'}>Ana</MenuItem>
+                                    <MenuItem value={'Pedro'}>Pedro</MenuItem>
+                                    <MenuItem value={'Juan'}>Juan</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div> }
                     </Stack>
                     <br/>
                     <Stack spacing={4} direction="row">
@@ -190,6 +239,7 @@ export default function RefferralForm(this: any, props: any) {
                             placeholder="Comments"
                             style={{ width: '100%', height: 180 }}
                             value={ comments }
+                            onChange={ handleInputValidations }
                         />
                     </Stack>
                     <br/>

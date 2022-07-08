@@ -38,13 +38,12 @@ const ReferralEdit = () => {
                 <CircularProgress color="inherit" />
             </Stack> :
                     <RefferralForm
-                    firstName={referralData?.name || ''}
-                    givenName={referralData?.username || ''}
-                    lastName={referralData?.address.city || ''}
+                    fullName={referralData?.name + ' '  + referralData?.username || ''}
                     phone={ referralData? '52555555555' : ''}
                     email={referralData?.email || ''}
                     linkedin={referralData?.name || ''}
                     cv={referralData?.website || ''}
+                    ta_recruiter={referralData?.ta_recruiter || 'Ana'}
                 />
             }
         </div>

@@ -12,7 +12,6 @@ const OpenPosition = () => {
                 <Chip label="Open Position"></Chip>
             </Divider>
             <br></br>
-            <TestTable/>
             <StickyHeadTable/>
         </div>
     </>

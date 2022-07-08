@@ -2,7 +2,7 @@
 import React from "react";
 import CreateButton from "../../components/button/Button";
 import RefferralForm from "../../components/refferalform/RefferalForm";
-import StickyHeadTable from "../../components/table/table";
+import StickyHeadTable, {TestTable} from "../../components/table/table";
 import './index.scss'
 
 import Divider from '@mui/material/Divider';
@@ -18,7 +18,7 @@ const MyReferral = () => {
             </Divider>
             <br></br>
             <CreateButton/>
-            <StickyHeadTable/>
+            <TestTable/>
         </div>
         </>
     );

@@ -98,8 +98,8 @@ export function TestTable() {
                 linkedin_url: 'ko4',
                 cv_url: 'ko5',
                 tech_stacks: ['Java','Python','React','Javascript','ko6','ko6','ko6','ko6','ko6','ko6','ko6'],
-                ta_recruiter: 'ko7',
-                referral_status_id: 'ko8',
+                ta_recruiter: data.name,
+                referral_status_id: 'in progress',
             }
         });
         setRow(mapping);
@@ -137,7 +137,7 @@ export function TestTable() {
             },
             { field: "ta_recruiter", headerName: "Ta Recruiter", width: 290 },
             { field: "referral_status_id", headerName: "Status", width: 190 },
-            { field: "id", headerName: "Actions", width: 300, renderCell: (params: any) => (
+            { field: "id", headerName: "Actions", width: 100, renderCell: (params: any) => (
                     <Box sx={{ '& button': { m: 1 } }}>
                         <div>
                             <IconButton color="primary" component="span">
@@ -146,7 +146,9 @@ export function TestTable() {
                                 </Link>
                             </IconButton>
                             <IconButton color="primary" component="span">
+                                <Link to={'#'}>
                                 <Delete/>
+                                </Link>
                             </IconButton>
                         </div>
                     </Box>
