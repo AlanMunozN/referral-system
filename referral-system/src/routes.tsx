@@ -7,10 +7,8 @@ import Page404 from "./views/notFound";
 
 const switchDashboardRoutes = (
     <Switch>
-        <Route strict exact path="/" render={() => <Redirect to="/positions"/>}/>
-        <Route strict exact path="/bonus"  component={MyBonus} />
+        <Route strict exact path="/" render={() => <Redirect to="/referrals"/>}/>
         <Route strict exact path="/referrals"  component={MyReferral} />
-        <Route strict exact path="/positions"  component={OpenPosition} />
         <Route path="*" component={Page404} />
     </Switch>
 );

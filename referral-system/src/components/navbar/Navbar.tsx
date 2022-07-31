@@ -17,14 +17,6 @@ import {Link} from "react-router-dom";
 
 const views = [
     {
-        title: 'Open Positions',
-        url: 'positions',
-    },
-    {
-        title: 'My bonus',
-        url: 'bonus',
-    },
-    {
         title: 'My referral',
         url: 'referrals',
     }
